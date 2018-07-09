@@ -12,8 +12,11 @@ BlochChain Proof-of-Concept using chain's developer edition blockchain
 [docker]: https://www.docker.com
 
 ## Running
+To run blockchain, just go with docker-compose:
 
-First set env var with CHAIN KEY from running chain, like:
+	docker-compose up
+
+Then, set env var with CHAIN KEY from running chain, like:
 
     export BCKEY=client:1db6ca297517df0524397018d5506afc28d48ac7977b0d2b64f2e81af1a48811
 
