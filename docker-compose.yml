@@ -1,0 +1,59 @@
+version: '2.1'
+services:
+  db:
+    container_name: alpha-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mycrazypassword
+      POSTGRES_DB: coredb
+    image: postgres:alpine
+    networks:
+      - chain_net
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  chain:
+    container_name: alpha-chain
+    environment:
+      DATABASE_URL: postgres://postgres:mycrazypassword@db:5432/coredb?sslmode=disable
+    image: chaincore/developer
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - chain_net
+    ports:
+      - "1999:1999"
+    volumes:
+      - datavolume:/var/log/chain
+    healthcheck:
+      test: "[ -s /var/log/chain/client-token ] && /usr/bin/chain/corectl config-generator"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  app:
+#    container_name: alpha-app
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
+#      chain:
+#        condition: service_healthy
+#    networks:
+#      - chain_net
+#    ports:
+#      - "8090:8090"
+#    volumes:
+#      - datavolume:/chain
+
+networks:
+  chain_net:
+
+volumes:
+  datavolume:
