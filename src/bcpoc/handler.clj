@@ -2,14 +2,54 @@
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.json :as middleware]
             [bcpoc.setup :as bcsetup]
             [bcpoc.chain :as bchain])
   (:use  [ring.adapter.jetty]))
 
 (def masterdetails (atom {}))
 
+(defn output-json
+  [status-code information]
+  {:status status-code
+   :headers {"Content-Type" "application/json"}
+   :body information })
+
+(defn json-ok
+  [information]
+  (output-json 200 information))
+
+(defn create-wallet
+  [x]
+  (if (get-in x [:body :username])
+    (json-ok {:message (bchain/create-wallet! (get-in x [:body :username]))})
+    (output-json 400 {:error "A parameter is missing on the request." })))
+
+(defn wallet-balance
+  [x]
+  (if (get-in x [:body :wallet])
+    (json-ok {:message (bchain/balance (get-in x [:body :wallet]))})
+    (output-json 400 {:error "A parameter is missing on the request." })))
+
+(defn issue->wallet
+  [x]
+  (if (and (get-in x [:body :wallet]) (get-in x [:body :amount]) )
+    (json-ok {:message (str (bchain/issue-asset! (get-in x [:body :amount]) (get-in x [:body :wallet])))})
+    (output-json 400 {:error "A parameter is missing on the request." })))
+
+(defn wallet-transfer
+  [x]
+  (if (and (get-in x [:body :origin]) (get-in x [:body :originxpub]) (get-in x [:body :destination]) (get-in x [:body :amount]))
+    (json-ok {:message (bchain/transfer! (get-in x [:body :origin]) (get-in x [:body :originxpub]) (get-in x [:body :destination]) (Integer/parseInt (get-in x [:body :amount])) )})
+    (output-json 400 {:error "A parameter is missing on the request." })))
+
+
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/"          []  "hello, i am working perfectly! Have a great day.")
+  (POST "/balance"  req (wallet-balance req))
+  (POST "/account"  req (create-wallet req))
+  (POST "/issue"    req (issue->wallet req))
+  (POST "/transfer" req (wallet-transfer req))
   (route/not-found "Not Found"))
 
 (def app
@@ -27,10 +67,12 @@
                (:i-id sbc)
                (:i-key sbc)
                (:i-asset sbc))]
-         (println obc))
+         (reset! masterdetails obc))
     (println "Starting API...")
     (->
-      (wrap-defaults app-routes site-defaults))))
+      (wrap-defaults app-routes (assoc-in site-defaults [:security :anti-forgery] false))
+      (middleware/wrap-json-body {:keywords? true})
+      middleware/wrap-json-response)))
 
 (defn -main []
   (let [port (Integer/parseInt (get (System/getenv) "PORT" "5000"))]
