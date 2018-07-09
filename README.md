@@ -14,6 +14,10 @@ To start a web server for the application, run:
 
     lein ring server
 
+Or run like heroku:
+
+	lein with-profile production trampoline run
+
 ## License
 
 Copyright © 2018 FIXME
