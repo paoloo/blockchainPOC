@@ -28,6 +28,13 @@ Or run like heroku:
 
 	lein with-profile production trampoline run
 
+## Deploy to Heroku
+- Deploy chain to heroku first, follow instructions on
+- Clone repository `git clone git@github.com:paoloo/bcpoc.git`
+- Create heroku application `heroku create bcpoc`
+- Add heroku endpoint `git remote add heroku https://git.heroku.com/bcpoc.git`
+- Deploy! `git push heroku master`
+
 ## API Reference
 
 - Create Wallet
@@ -156,6 +163,11 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
 - **RUBY**: https://chain.com/docs/1.2/ruby/doc/index.html
 - **NODE**: https://chain.com/docs/1.2/node/doc/index.html
 
+## ToDo
+- add Dockerfile with buildstep and run everything with docker-compose
+- add payment list endpoint
+- create frontend
+
 ## License
 
-Copyright © 2018 Paolo Oliveira
+Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 persons.
