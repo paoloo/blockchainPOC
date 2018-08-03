@@ -16,7 +16,7 @@ To run blockchain, just go with docker-compose:
 
 	docker-compose up
 
-Then, set env var with CHAIN KEY from running chain, like:
+Then, set env var with CHAIN KEY from running chain screen(where docker-compose is running), like:
 
     export BCKEY=client:1db6ca297517df0524397018d5506afc28d48ac7977b0d2b64f2e81af1a48811
 
@@ -164,10 +164,12 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
 - **NODE**: https://chain.com/docs/1.2/node/doc/index.html
 
 ## ToDo
+- **REFACTOR** as it was a copy-and-paste from REPL to test the concept
 - add Dockerfile with buildstep and run everything with docker-compose
+- **THE DOCKERFILE IS BUGGY AND FOR EXPERIMENTS**
 - add payment list endpoint
 - create frontend
 
 ## License
 
-Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 persons.
+Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 monkeys.
