@@ -169,11 +169,21 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
 - **RUBY**: https://chain.com/docs/1.2/ruby/doc/index.html
 - **NODE**: https://chain.com/docs/1.2/node/doc/index.html
 
+## Docker
+
+- Create a self contained version of application with: `lein ring uberjar`;
+- Run `docker build -t paoloo/bcpoc .` to create image;
+- And finally, run `docker run -p 5000:5000 paoloo/bcpoc` to instantiate it.
+OR
+- docker-compose up
+> (and be happy)
+
+
 ## ToDo
 - **REFACTOR** as it was a copy-and-paste from REPL to test the concept
-- add Dockerfile with buildstep and run everything with docker-compose
-- **THE DOCKERFILE IS BUGGY AND FOR EXPERIMENTS**
-- add payment list endpoint
+- ~~Add Dockerfile with buildstep and run everything with docker-compose~~
+- ~~THE DOCKERFILE IS BUGGY AND FOR EXPERIMENTS~~
+- ~~add payment list endpoint~~
 - create frontend
 
 ## License
