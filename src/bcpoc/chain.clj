@@ -102,29 +102,17 @@
         tdata (atom [])]
     (while (.hasNext transactions)
       (let [current (.next transactions)
-            c-inputs (into [] (.inputs current))
             c-outputs (into [] (.outputs current))
             placeholder (atom {})]
-          (reduce + (map
+            (reduce + (map
                  (fn [k] (do
-                   (swap! placeholder assoc
-                      :in-id (.spentOutputId k)
-                      :in-amount (.amount k)
-                      :in-asset (.assetAlias k)
-                      :from (.accountAlias k)
-                   ) 0))
-                 c-inputs))
-          (reduce + (map
-                 (fn [k] (do
-                   (swap! placeholder assoc
-                      :out-id (.id k)
-                      :out-amount (.amount k)
-                      :out-asset (.assetAlias k)
+                   (if (= (.purpose k) "receive")
+                     (swap! placeholder assoc
+                      :amount (.amount k)
+                      :asset (.assetAlias k)
                       :to (.accountAlias k)
-                   ) 0))
+                      :type (if (= (.accountId k) account-id) "credit" "debit")
+                   )) 0))
                  c-outputs))
-          (swap! placeholder assoc
-                      :transaction-id (.id current)
-                      :timestamp (.timestamp current))
           (swap! tdata conj @placeholder)
       )) @tdata))
