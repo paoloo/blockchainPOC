@@ -53,6 +53,12 @@ Or run like heroku:
   - **POST** /transfer
     - required JSON params: `origin`: string - origin wallet id, `originxpug`: string - origin wallet xpub, `destination`:string - destination wallet id, `amount`: int - amount to transfer
     - output: `message`: string - transaction status
+- List transactions of the wallet
+  - **POST** /list
+    - required JSON params: `wallet`: string - wallet id from creation
+    - output: `message`: array of transactions
+
+
 
 ## Examples
 - Create wallets
