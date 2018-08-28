@@ -1,6 +1,6 @@
-(defproject bcpoc "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject bcpoc "0.5.0-HOTASHELL"
+  :description "BCPOC: a proof-of-concept blockchain-based wallet API"
+  :url "https://github.com/paoloo/bcpoc"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [compojure "1.5.1"]
