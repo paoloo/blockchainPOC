@@ -1,6 +1,6 @@
 # bcpoc
 
-BlochChain Proof-of-Concept using chain's developer edition blockchain
+BlochChain Proof-of-Concept using chain.com's developer edition blockchain and clojure
 
 ## Prerequisites
 
@@ -12,21 +12,27 @@ BlochChain Proof-of-Concept using chain's developer edition blockchain
 [docker]: https://www.docker.com
 
 ## Running
-To run blockchain, just go with docker-compose:
+To run everything together, just go with docker-compose:
 
 	docker-compose up
 
-Then, set env var with CHAIN KEY from running chain screen(where docker-compose is running), like:
+Or, if you want to, run only the blockchain with docker
+
+    docker run -p 1999:1999 chaincore/developer
+
+get the CHAIN KEY from terminal, go http://localhost:1999, login and set everything up. Then, set the env var with the same CHAIN KEY, something like:
 
     export BCKEY=client:1db6ca297517df0524397018d5506afc28d48ac7977b0d2b64f2e81af1a48811
 
-To start a web server for the application, run:
+and, to start a web server for the application, run:
 
     lein ring server
 
 Or run like heroku:
 
 	lein with-profile production trampoline run
+
+That's all ;D
 
 ## Deploy to Heroku
 - Deploy chain to heroku first, follow instructions on
@@ -57,7 +63,6 @@ Or run like heroku:
   - **POST** /list
     - required JSON params: `wallet`: string - wallet id from creation
     - output: `message`: array of transactions
-
 
 
 ## Examples
@@ -163,6 +168,14 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
   "message": 30
 }
 ```
+```bash
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/list | jq '.'
+```
+```json
+{
+  "message": [{"amount": 12, "asset": "PAOLOCOIN", "to": "Leticia", "type":"debit"}, {"amount": 50, "asset": "PAOLOCOIN", "to": "Sergio", "type":"debit"}]
+}
+```
 
 ## SDK Reference
 - **JAVA**: https://chain.com/docs/1.2/java/javadoc/index.html
@@ -170,22 +183,24 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
 - **NODE**: https://chain.com/docs/1.2/node/doc/index.html
 
 ## Docker
-
 - Create a self contained version of application with: `lein ring uberjar`;
+
+Then
+
 - Run `docker build -t paoloo/bcpoc .` to create image;
 - And finally, run `docker run -p 5000:5000 paoloo/bcpoc` to instantiate it.
-OR
-- docker-compose up
-> (and be happy)
 
+OR
+
+- docker-compose up
+
+`and be happy ;D`
 
 ## ToDo
-- **REFACTOR** as it was a copy-and-paste from REPL to test the concept
-- ~~Add Dockerfile with buildstep and run everything with docker-compose~~
-- ~~THE DOCKERFILE IS BUGGY AND FOR EXPERIMENTS~~
-- ~~add payment list endpoint~~
-- create frontend
+- **REFACTOR** as it is a copy-and-paste from REPL to test the concept
+- create a middleware to tokenize wallet data(id amd xpub)
+- create front-end in clojurescript
 
 ## License
 
-Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 monkeys.
+Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 children.
