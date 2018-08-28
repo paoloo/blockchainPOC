@@ -43,6 +43,12 @@
     (json-ok {:message (bchain/transfer! (get-in x [:body :origin]) (get-in x [:body :originxpub]) (get-in x [:body :destination]) (Integer/parseInt (get-in x [:body :amount])) )})
     (output-json 400 {:error "A parameter is missing on the request." })))
 
+(defn wallet-transactions
+  [x]
+  (if (get-in x [:body :wallet])
+    (json-ok {:message (bchain/list-transactions (get-in x [:body :wallet]))})
+    (output-json 400 {:error "A parameter is missing on the request." })))
+
 
 (defroutes app-routes
   (GET "/"          []  "hello, i am working perfectly! Have a great day.")
@@ -50,6 +56,7 @@
   (POST "/account"  req (create-wallet req))
   (POST "/issue"    req (issue->wallet req))
   (POST "/transfer" req (wallet-transfer req))
+  (POSR "/list"     req (wallet-transactions req))
   (route/not-found "Not Found"))
 
 (def app
