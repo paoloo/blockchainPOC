@@ -37,20 +37,23 @@ services:
       timeout: 5s
       retries: 5
 
-#  app:
-#    container_name: alpha-app
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    depends_on:
-#      chain:
-#        condition: service_healthy
-#    networks:
-#      - chain_net
-#    ports:
-#      - "8090:8090"
-#    volumes:
-#      - datavolume:/chain
+  app:
+    container_name: alpha-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 5000
+      BCURI: http://chain:1999
+    depends_on:
+      chain:
+        condition: service_healthy
+    networks:
+      - chain_net
+    ports:
+      - "5000:5000"
+    volumes:
+      - datavolume:/chain
 
 networks:
   chain_net:

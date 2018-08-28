@@ -56,21 +56,22 @@
   (POST "/account"  req (create-wallet req))
   (POST "/issue"    req (issue->wallet req))
   (POST "/transfer" req (wallet-transfer req))
-  (POSR "/list"     req (wallet-transactions req))
+  (POST "/list"     req (wallet-transactions req))
   (route/not-found "Not Found"))
 
 (def app
     (do
     (println "Initializing blockchain...")
     (let [envvars (System/getenv)
-         sbc (bcsetup/setup-blockchain
+          datafile (clojure.string/trim (clojure.string/trim-newline (slurp "/chain/client-token")))
+          sbc (bcsetup/setup-blockchain
                (get envvars "BCURI" "http://localhost:1999")
-               (get envvars "BCKEY" "")
+               (get envvars "BCKEY" datafile)
                (get envvars "BCBANK" "PAOLOBANK")
                (get envvars "BCCOIN" "PAOLOCOIN"))
-         obc (bchain/init-blockchain
+          obc (bchain/init-blockchain
                (get envvars "BCURI" "http://localhost:1999")
-               (get envvars "BCKEY" "")
+               (get envvars "BCKEY" datafile)
                (:i-id sbc)
                (:i-key sbc)
                (:i-asset sbc))]
