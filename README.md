@@ -2,6 +2,8 @@
 
 BlochChain Proof-of-Concept using chain.com's developer edition blockchain and clojure
 
+
+If you enjoy the concept or this is useful for you, consider buing a coffee to me ;D
 [![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/paoloo)
 
 ## Prerequisites
@@ -170,6 +172,7 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
   "message": 30
 }
 ```
+- Listing all transactions
 ```bash
 paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/list | jq '.'
 ```
@@ -204,5 +207,12 @@ OR
 - create mobile-friendly frontend in clojurescript
 
 ## License
+- application
 
-Copyright © 2018 Paolo Oliveira - if you use this code, you have to teach something to at least 5 children.
+Copyright © 2018 Paolo Oliveira [MIT License](LICENSE)
+
+- Chain.com's blockchain
+
+Chain Core Developer Edition is licensed under the terms of the [GNU Affero General Public License Version 3 (AGPL)](https://github.com/chain/chain/blob/main/LICENSE).
+
+The Chain Java SDK (`/sdk/java`) is licensed under the terms of the [Apache License Version 2.0](https://github.com/chain/chain/blob/main/sdk/java/LICENSE).
