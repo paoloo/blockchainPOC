@@ -4,6 +4,7 @@ BlochChain Proof-of-Concept using chain.com's developer edition blockchain and c
 
 
 If you enjoy the concept or this is useful for you, consider buing a coffee to me ;D
+
 [![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/paoloo)
 
 ## Prerequisites
