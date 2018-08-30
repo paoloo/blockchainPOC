@@ -2,6 +2,8 @@
 
 BlochChain Proof-of-Concept using chain.com's developer edition blockchain and clojure
 
+[![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/paoloo)
+
 ## Prerequisites
 
 - You will need [Leiningen][] 2.0.0 or above installed;
@@ -199,7 +201,7 @@ OR
 ## ToDo
 - **REFACTOR** as it is a copy-and-paste from REPL to test the concept
 - create a middleware to tokenize wallet data(id amd xpub)
-- create front-end in clojurescript
+- create mobile-friendly frontend in clojurescript
 
 ## License
 
