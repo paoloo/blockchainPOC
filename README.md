@@ -204,11 +204,11 @@ OR
 
 ## ToDo
 - **REFACTOR** as it is a copy-and-paste from REPL to test the concept
-- create a middleware to tokenize wallet data(id amd xpub)
+- create a middleware to tokenize wallet data(wallet id+xpub)
 - create mobile-friendly frontend in clojurescript
 
 ## License
-- application
+- Application
 
 Copyright © 2018 Paolo Oliveira [MIT License](LICENSE)
 
