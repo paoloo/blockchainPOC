@@ -46,6 +46,20 @@ That's all ;D
 - Add heroku endpoint `git remote add heroku https://git.heroku.com/bcpoc.git`
 - Deploy! `git push heroku master`
 
+## Docker
+- Create a self contained version of application with: `lein ring uberjar`;
+
+Then
+
+- Run `docker build -t paoloo/bcpoc .` to create image;
+- And finally, run `docker run -p 5000:5000 paoloo/bcpoc` to instantiate it.
+
+OR
+
+- docker-compose up
+
+`and be happy ;D`
+
 ## API Reference
 
 - Create Wallet
@@ -71,9 +85,11 @@ That's all ;D
 
 
 ## Examples
-- Create wallets
+- **Create a wallet**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"username":"paolo"}' http://localhost:5000/account | jq '.'
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json'\
+                    -d '{"username":"paolo"}'\
+		    http://localhost:5000/account | jq '.'
 ```
 ```json
 {
@@ -83,70 +99,33 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"usernam
   }
 }
 ```
+- **Check balance**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"username":"sergio"}' http://localhost:5000/account | jq '.'
-```
-```json
-{
-  "message": {
-    "id": "acc1DHJ13H60080C",
-    "xpub": "48c1016c6fd094007376fe14397a1c38d68c0e9c7ac3212911f64e721c669baf787f41a41362c4f2fa464e29fb4d5b36aac0f131e6102d240a4127323649a7b5"
-  }
-}
-```
-- Check balance
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/balance | jq '.'
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json'\
+                    -d '{"wallet":"acc1DHJ0XJ5G080A"}'\
+		    http://localhost:5000/balance | jq '.'
 ```
 ```json
 {
   "message": 0
 }
 ```
+- **Issue assets for a wallet**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ13H60080C"}' http://localhost:5000/balance | jq '.'
-```
-```json
-{
-  "message": 0
-}
-```
-- Issue assets for a wallet
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A", "amount":20}' http://localhost:5000/issue | jq '.'
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json'\
+                    -d '{"wallet":"acc1DHJ0XJ5G080A", "amount":20}'\
+		    http://localhost:5000/issue | jq '.'
 ```
 ```json
 {
   "message": "com.chain.api.Transaction$SubmitResponse@7eb71769"
 }
 ```
+- **Transfer from one wallet to another**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/balance | jq '.'
-```
-```json
-{
-  "message": 20
-}
-```
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A", "amount":90}' http://localhost:5000/issue | jq '.'
-```
-```json
-{
-  "message": "com.chain.api.Transaction$SubmitResponse@2517d79c"
-}
-```
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/balance | jq '.'
-```
-```json
-{
-  "message": 110
-}
-```
-- Transfer from one wallet to another
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"origin":"acc1DHJ0XJ5G080A", "originxpub":"e46a8ee3a91395998c3482c88ca8e67c663edd9c2442e477c093082e3248848fef1fdd5253003a51e8d323bf4e9bb559ee4f3eae1553b88c25067da49676846a", "destination":"acc1DHJ13H60080C", "amount":"30"}' http://localhost:5000/transfer | jq '.'
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json'\
+                    -d '{"origin":"acc1DHJ0XJ5G080A", "originxpub":"e46a8ee3a91395998c3482c88ca8e67c663edd9c2442e477c093082e3248848fef1fdd5253003a51e8d323bf4e9bb559ee4f3eae1553b88c25067da49676846a", "destination":"acc1DHJ13H60080C", "amount":"30"}'\
+		    http://localhost:5000/transfer | jq '.'
 ```
 ```json
 {
@@ -156,30 +135,39 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"origin"
   }
 }
 ```
-- Check the transaction asking for balance again
+- **Listing all transactions**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/balance | jq '.'
+paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json'\
+                    -d '{"wallet":"acc1DHJ0XJ5G080A"}'\
+		    http://localhost:5000/list | jq '.'
 ```
 ```json
 {
-  "message": 80
+  "message": [
+    {
+      "amount": 30,
+      "asset": "PAOLOCOIN",
+      "to": "Leticia",
+      "type": "debit"
+    },
+    {
+      "amount": 50,
+      "asset": "PAOLOCOIN",
+      "to": "Sergio",
+      "type": "debit"
+    }
+  ]
 }
 ```
+- **Purge assets from bank wallet**
 ```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ13H60080C"}' http://localhost:5000/balance | jq '.'
+curl -s -XPOST -H 'Content-Type : application/json'\
+     -d '{"amount":30}'\
+     http://localhost:5000/purge | jq '.'
 ```
 ```json
 {
-  "message": 30
-}
-```
-- Listing all transactions
-```bash
-paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet":"acc1DHJ0XJ5G080A"}' http://localhost:5000/list | jq '.'
-```
-```json
-{
-  "message": [{"amount": 12, "asset": "PAOLOCOIN", "to": "Leticia", "type":"debit"}, {"amount": 50, "asset": "PAOLOCOIN", "to": "Sergio", "type":"debit"}]
+  "message": "{:status 0, :description \"30 PAOLOCOIN successfuly purged.\"}"
 }
 ```
 
@@ -187,20 +175,6 @@ paolo@daath ~$ curl -s -XPOST -H 'Content-Type : application/json' -d '{"wallet"
 - **JAVA**: https://chain.com/docs/1.2/java/javadoc/index.html
 - **RUBY**: https://chain.com/docs/1.2/ruby/doc/index.html
 - **NODE**: https://chain.com/docs/1.2/node/doc/index.html
-
-## Docker
-- Create a self contained version of application with: `lein ring uberjar`;
-
-Then
-
-- Run `docker build -t paoloo/bcpoc .` to create image;
-- And finally, run `docker run -p 5000:5000 paoloo/bcpoc` to instantiate it.
-
-OR
-
-- docker-compose up
-
-`and be happy ;D`
 
 ## ToDo
 - **REFACTOR** as it is a copy-and-paste from REPL to test the concept
