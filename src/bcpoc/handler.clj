@@ -49,6 +49,11 @@
     (json-ok {:message (bchain/list-transactions (get-in x [:body :wallet]))})
     (output-json 400 {:error "A parameter is missing on the request." })))
 
+(defn purge-wallet
+  [x]
+  (if  (get-in x [:body :amount])
+    (json-ok {:message (str (bchain/purge-asset! (get-in x [:body :amount])))})
+    (output-json 400 {:error "A parameter is missing on the request." })))
 
 (defroutes app-routes
   (GET "/"          []  "hello, i am working perfectly! Have a great day.")
@@ -57,6 +62,7 @@
   (POST "/issue"    req (issue->wallet req))
   (POST "/transfer" req (wallet-transfer req))
   (POST "/list"     req (wallet-transactions req))
+  (POST "/purge"    req (purge-wallet req))
   (route/not-found "Not Found"))
 
 (def app
@@ -68,7 +74,9 @@
                (get envvars "BCURI" "http://localhost:1999")
                (get envvars "BCKEY" datafile)
                (get envvars "BCBANK" "PAOLOBANK")
-               (get envvars "BCCOIN" "PAOLOCOIN"))
+               (get envvars "BCCOIN" "PAOLOCOIN")
+               (get envvars "BCCID" "")
+               (get envvars "BCCXP" ""))
           obc (bchain/init-blockchain
                (get envvars "BCURI" "http://localhost:1999")
                (get envvars "BCKEY" datafile)

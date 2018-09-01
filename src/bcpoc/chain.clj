@@ -13,6 +13,7 @@
                          Balance
                          Balance$QueryBuilder
                          Transaction$QueryBuilder
+                         Transaction$Action$Retire
                          Transaction$Action$ControlWithAccount
                          Transaction$Action$SpendFromAccount)))
 
@@ -116,3 +117,24 @@
                  c-outputs))
           (swap! tdata conj @placeholder)
       )) @tdata))
+
+(defn purge-asset!
+  ([amount asset-alias account-id account-xpub]
+  (if (>= (balance account-id asset-alias) amount)
+    (let [unsigned-transaction
+          (-> (Transaction$Builder.)
+              (.addAction (-> (Transaction$Action$SpendFromAccount.)
+                              (.setAccountId account-id)
+                              (.setAssetAlias asset-alias)
+                              (.setAmount amount)))
+              (.addAction (-> (Transaction$Action$Retire.)
+                              (.setAssetAlias asset-alias)
+                              (.setAmount amount)))
+              (.build (:chain @config)))
+          _ (HsmSigner/addKey account-xpub (MockHsm/getSignerClient (:chain @config)))
+          signed-transaction (HsmSigner/sign unsigned-transaction)]
+      (Transaction/submit (:chain @config) signed-transaction)
+      {:status 0 :description (str amount " " asset-alias " successfuly purged.")})
+    {:status -1 :description "Not enough funds to purge."}))
+  ([amount]
+    (purge-asset! amount (:asset-alias @config) (:issuer-id @config) (:issuer-key @config))))
