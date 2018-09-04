@@ -1,6 +1,6 @@
-# bcpoc
+# BCpoc
 
-BlochChain Proof-of-Concept using chain.com's developer edition blockchain and clojure
+A BlockChain-based Proof-of-Concept Wallet API using [chain.com's](https://chain.com/docs/1.2/core/get-started/introduction) developer edition blockchain and clojure
 
 
 If you enjoy the concept or this is useful for you, consider buing a coffee to me ;D
