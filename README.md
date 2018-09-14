@@ -1,4 +1,4 @@
-# BCpoc
+# blockchainPOC
 
 A BlockChain-based Proof-of-Concept Wallet API using [chain.com's](https://chain.com/docs/1.2/core/get-started/introduction) developer edition blockchain and clojure
 
